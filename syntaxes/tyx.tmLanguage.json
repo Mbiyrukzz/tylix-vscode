@@ -1,0 +1,472 @@
+{
+  "name": "Tylix",
+  "scopeName": "source.tyx",
+  "injections": {
+    "L:source.tyx - source.ts": {
+      "patterns": [
+        {
+          "include": "#handlebars"
+        },
+        {
+          "include": "#class-attr"
+        }
+      ]
+    },
+    "L:meta.section.tyx - string - comment, L:meta.embedded.script.tyx - string - comment": {
+      "patterns": [
+        {
+          "match": "(?<![.\\w$])(not|is|and|or)(?![\\w$:])",
+          "name": "keyword.operator.word.tyx"
+        }
+      ]
+    }
+  },
+  "patterns": [
+    {
+      "include": "#script-block"
+    },
+    {
+      "include": "#template-tag"
+    },
+    {
+      "include": "#page-decl"
+    },
+    {
+      "include": "#import"
+    },
+    {
+      "include": "#title"
+    },
+    {
+      "include": "#section"
+    },
+    {
+      "include": "#template-section"
+    }
+  ],
+  "repository": {
+    "page-decl": {
+      "match": "^(page|capability)\\s+([A-Za-z_]\\w*)",
+      "captures": {
+        "1": {
+          "name": "keyword.control.page.tyx"
+        },
+        "2": {
+          "name": "entity.name.type.class.tyx"
+        }
+      }
+    },
+    "title": {
+      "match": "^(title)\\s+(\"[^\"]*\"|'[^']*')",
+      "captures": {
+        "1": {
+          "name": "keyword.control.section.tyx"
+        },
+        "2": {
+          "name": "string.quoted.tyx"
+        }
+      }
+    },
+    "import": {
+      "begin": "^(import)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.import.tyx"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "match": "\\b(from|as)\\b",
+          "name": "keyword.control.from.tyx"
+        },
+        {
+          "match": "\"[^\"]*\"|'[^']*'",
+          "name": "string.quoted.tyx"
+        },
+        {
+          "match": "\\b[A-Za-z_]\\w*\\b",
+          "name": "variable.other.readwrite.tyx"
+        }
+      ]
+    },
+    "script-block": {
+      "begin": "(<)(script)(>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.tyx"
+        },
+        "2": {
+          "name": "entity.name.tag.tyx"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.tyx"
+        }
+      },
+      "end": "(</)(script)(>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.tyx"
+        },
+        "2": {
+          "name": "entity.name.tag.tyx"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.tyx"
+        }
+      },
+      "contentName": "meta.embedded.script.tyx",
+      "patterns": [
+        {
+          "include": "#section"
+        },
+        {
+          "include": "source.ts"
+        }
+      ]
+    },
+    "template-tag": {
+      "begin": "(<)(template)(>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.tyx"
+        },
+        "2": {
+          "name": "entity.name.tag.tyx"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.tyx"
+        }
+      },
+      "end": "(</)(template)(>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.tyx"
+        },
+        "2": {
+          "name": "entity.name.tag.tyx"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.tyx"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#handlebars"
+        },
+        {
+          "include": "#component-tag"
+        },
+        {
+          "include": "text.html.basic"
+        }
+      ]
+    },
+    "template-section": {
+      "begin": "^(template)\\s*$",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.section.tyx"
+        }
+      },
+      "end": "(?!)",
+      "patterns": [
+        {
+          "include": "#handlebars"
+        },
+        {
+          "include": "#component-tag"
+        },
+        {
+          "include": "text.html.basic"
+        }
+      ]
+    },
+    "section": {
+      "begin": "^(needs|uses|prefetch|background|permissions|meta|state|action|init|onMount)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.section.tyx"
+        }
+      },
+      "end": "(?=^\\S)",
+      "name": "meta.section.tyx",
+      "patterns": [
+        {
+          "include": "#section-code"
+        }
+      ]
+    },
+    "section-code": {
+      "patterns": [
+        {
+          "match": "\\b\\d+(?:ms|s|m|h|d)\\b",
+          "name": "constant.numeric.duration.tyx"
+        },
+        {
+          "match": "^\\s+([A-Za-z_]\\w*)\\s*(:)",
+          "captures": {
+            "1": {
+              "name": "variable.other.property.tyx"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.tyx"
+            }
+          }
+        },
+        {
+          "match": "^\\s+([A-Z]\\w*(?:\\.\\w+)*)\\s*$",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.tyx"
+            }
+          }
+        },
+        {
+          "match": "^(?: {2}|\\t)(async\\s+)?(?!(?:if|for|while|switch|catch|function|return)\\b)([A-Za-z_]\\w*)(?=\\s*\\([^)]*\\)\\s*\\{\\s*$)",
+          "captures": {
+            "1": {
+              "name": "storage.modifier.async.tyx"
+            },
+            "2": {
+              "name": "entity.name.function.tyx"
+            }
+          }
+        },
+        {
+          "match": "\\b(not|is|and|or)\\b",
+          "name": "keyword.operator.word.tyx"
+        },
+        {
+          "include": "source.ts"
+        }
+      ]
+    },
+    "handlebars": {
+      "patterns": [
+        {
+          "begin": "(\\{\\{)(#)(if|each)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.begin.tyx"
+            },
+            "2": {
+              "name": "keyword.control.block.tyx"
+            },
+            "3": {
+              "name": "keyword.control.block.tyx"
+            }
+          },
+          "end": "(\\}\\})",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.end.tyx"
+            }
+          },
+          "name": "meta.block.open.tyx",
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "match": "(\\{\\{)(/)(if|each)(\\}\\})",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.tag.begin.tyx"
+            },
+            "2": {
+              "name": "keyword.control.block.tyx"
+            },
+            "3": {
+              "name": "keyword.control.block.tyx"
+            },
+            "4": {
+              "name": "punctuation.definition.tag.end.tyx"
+            }
+          }
+        },
+        {
+          "match": "(\\{\\{)(else)(\\}\\})",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.tag.begin.tyx"
+            },
+            "2": {
+              "name": "keyword.control.block.tyx"
+            },
+            "3": {
+              "name": "punctuation.definition.tag.end.tyx"
+            }
+          }
+        },
+        {
+          "begin": "\\{\\{",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.tag.begin.tyx"
+            }
+          },
+          "end": "\\}\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.tag.end.tyx"
+            }
+          },
+          "name": "meta.interpolation.tyx",
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        }
+      ]
+    },
+    "expression": {
+      "patterns": [
+        {
+          "match": "\"(?:[^\"\\\\]|\\\\.)*\"",
+          "name": "string.quoted.double.tyx"
+        },
+        {
+          "match": "'(?:[^'\\\\]|\\\\.)*'",
+          "name": "string.quoted.single.tyx"
+        },
+        {
+          "match": "\\b\\d+(?:\\.\\d+)?\\b",
+          "name": "constant.numeric.tyx"
+        },
+        {
+          "match": "\\b(true|false|null|undefined)\\b",
+          "name": "constant.language.tyx"
+        },
+        {
+          "match": "\\b(not|is|and|or|in)\\b",
+          "name": "keyword.operator.word.tyx"
+        },
+        {
+          "match": "\\b[A-Z]\\w*\\b(?=\\.)",
+          "name": "entity.name.type.tyx"
+        },
+        {
+          "match": "(?<=\\.)[A-Za-z_]\\w*(?=\\s*\\()",
+          "name": "entity.name.function.tyx"
+        },
+        {
+          "match": "\\b[A-Za-z_]\\w*(?=\\s*\\()",
+          "name": "entity.name.function.tyx"
+        },
+        {
+          "match": "(?<=\\.)[A-Za-z_]\\w*",
+          "name": "variable.other.property.tyx"
+        },
+        {
+          "match": "\\+|-|\\*|/|==|!=|<=|>=|<|>|&&|\\|\\||!",
+          "name": "keyword.operator.tyx"
+        },
+        {
+          "match": "\\b[A-Za-z_]\\w*\\b",
+          "name": "variable.other.readwrite.tyx"
+        }
+      ]
+    },
+    "class-attr": {
+      "begin": "(\\s*)(?<![\\w-])(class)(=)(\")",
+      "beginCaptures": {
+        "2": {
+          "name": "entity.other.attribute-name.class.tyx"
+        },
+        "3": {
+          "name": "punctuation.separator.key-value.tyx"
+        },
+        "4": {
+          "name": "punctuation.definition.string.begin.tyx"
+        }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.tyx"
+        }
+      },
+      "name": "string.quoted.double.class.tyx",
+      "patterns": [
+        {
+          "include": "#handlebars"
+        },
+        {
+          "match": "(?<![\\w\\[-])(?:[a-z0-9_-]+:)+",
+          "name": "keyword.other.variant.tyx"
+        },
+        {
+          "match": "\\[[^\\]\\s]+\\]",
+          "name": "constant.other.arbitrary.tyx"
+        },
+        {
+          "match": "/\\d+",
+          "name": "constant.numeric.opacity.tyx"
+        },
+        {
+          "match": "\\b\\d+(?:\\.\\d+)?\\b",
+          "name": "constant.numeric.tyx"
+        },
+        {
+          "match": "-?[A-Za-z]+(?:-[A-Za-z]+)*-?",
+          "name": "support.constant.tailwind.tyx"
+        }
+      ]
+    },
+    "component-tag": {
+      "begin": "(</?)([A-Z][\\w.]*)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.tyx"
+        },
+        "2": {
+          "name": "entity.name.tag.component.tyx"
+        }
+      },
+      "end": "(/?>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.end.tyx"
+        }
+      },
+      "name": "meta.tag.component.tyx",
+      "patterns": [
+        {
+          "include": "#class-attr"
+        },
+        {
+          "begin": "\"",
+          "end": "\"",
+          "name": "string.quoted.double.tyx",
+          "patterns": [
+            {
+              "include": "#handlebars"
+            }
+          ]
+        },
+        {
+          "begin": "'",
+          "end": "'",
+          "name": "string.quoted.single.tyx",
+          "patterns": [
+            {
+              "include": "#handlebars"
+            }
+          ]
+        },
+        {
+          "match": "[@:A-Za-z_][\\w:.-]*",
+          "name": "entity.other.attribute-name.tyx"
+        },
+        {
+          "match": "=",
+          "name": "punctuation.separator.key-value.tyx"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "name": "tyx-language",
+  "displayName": "Tylix (.tyx) \u2014 Language, Themes & Icons",
+  "description": "Syntax highlighting, Tylix Dark/Light color themes and file icons for Tylix .tyx files",
+  "version": "0.2.0",
+  "publisher": "tylix",
+  "icon": "icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mbiyrukzz/tylix-vscode"
+  },
+  "homepage": "https://github.com/Mbiyrukzz/tylix-vscode#readme",
+  "bugs": {
+    "url": "https://github.com/Mbiyrukzz/tylix-vscode/issues"
+  },
+  "keywords": [
+    "tylix",
+    "tyx",
+    "syntax highlighting",
+    "theme",
+    "icon theme",
+    "dark theme",
+    "light theme"
+  ],
+  "galleryBanner": {
+    "color": "#0b1220",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "tyx",
+        "aliases": [
+          "Tylix",
+          "tyx"
+        ],
+        "extensions": [
+          ".tyx"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tyx",
+        "scopeName": "source.tyx",
+        "path": "./syntaxes/tyx.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.script.tyx": "typescript",
+          "meta.interpolation.tyx": "javascript",
+          "text.html.basic": "html"
+        }
+      }
+    ],
+    "themes": [
+      {
+        "label": "Tylix Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/tylix-dark-color-theme.json"
+      },
+      {
+        "label": "Tylix Light",
+        "uiTheme": "vs",
+        "path": "./themes/tylix-light-color-theme.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "tylix-icons",
+        "label": "Tylix Icons",
+        "path": "./icons/tylix-icon-theme.json"
+      }
+    ]
+  }
+}
